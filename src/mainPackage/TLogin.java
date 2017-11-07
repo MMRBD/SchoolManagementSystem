@@ -155,7 +155,8 @@ public class TLogin extends javax.swing.JFrame {
         String userName = userNameTextField.getText();
         String userPass = passTextField.getText();
         DbHelper dh = new DbHelper();
-        dh.selectForLogin(userName, userPass, "t");
+        dh.selectForLogin(userName, userPass, "t_login");
+        this.dispose();
     }//GEN-LAST:event_tLoginButtonActionPerformed
 
     private void regjButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_regjButton3ActionPerformed
