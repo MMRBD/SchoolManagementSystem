@@ -7,13 +7,11 @@ package mainPackage;
 
 import javax.swing.JOptionPane;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -21,6 +19,9 @@ import javax.swing.table.DefaultTableModel;
  * @author MOKLESUR RAHMAN
  */
 public class Admission extends javax.swing.JFrame {
+
+    String flag = "";
+    String value = "";
 
     /**
      * Creates new form Admission
@@ -66,7 +67,7 @@ public class Admission extends javax.swing.JFrame {
         clearButton = new javax.swing.JButton();
         deleteJButton = new javax.swing.JButton();
         ViewjButton = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        updateBtn = new javax.swing.JButton();
         classComboBox = new javax.swing.JComboBox<>();
         dateBirthTextField = new javax.swing.JTextField();
         admissionDateTextField = new javax.swing.JTextField();
@@ -92,20 +93,18 @@ public class Admission extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Wide Latin", 1, 36)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 204, 153));
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Admission Form");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 601, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(56, 56, 56))
+            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+            .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
@@ -169,18 +168,28 @@ public class Admission extends javax.swing.JFrame {
         clearButton.setText("CLEAR");
 
         deleteJButton.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        deleteJButton.setText("Delete");
+        deleteJButton.setText("DELETE");
+        deleteJButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteJButtonActionPerformed(evt);
+            }
+        });
 
         ViewjButton.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        ViewjButton.setText("View");
+        ViewjButton.setText("VIEW");
         ViewjButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ViewjButtonActionPerformed(evt);
             }
         });
 
-        jButton5.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jButton5.setText("Update");
+        updateBtn.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        updateBtn.setText("UPDATE");
+        updateBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updateBtnActionPerformed(evt);
+            }
+        });
 
         classComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "CLASS 1", "CLASS 2", "CLASS 3", "CLASS 4", "CLASS 5" }));
 
@@ -207,10 +216,10 @@ public class Admission extends javax.swing.JFrame {
                 .addComponent(clearButton, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(ViewjButton, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30)
-                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(31, 31, 31)
-                .addComponent(deleteJButton, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(updateBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(26, 26, 26)
+                .addComponent(deleteJButton)
                 .addGap(18, 18, 18)
                 .addComponent(submitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -218,8 +227,8 @@ public class Admission extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 848, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 891, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(21, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -266,7 +275,7 @@ public class Admission extends javax.swing.JFrame {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(fatherMobileTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addComponent(addressTextField))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, 40, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel12)
@@ -276,7 +285,7 @@ public class Admission extends javax.swing.JFrame {
                                 .addComponent(jLabel13)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(admissionDateTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap(40, Short.MAX_VALUE))))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -329,19 +338,17 @@ public class Admission extends javax.swing.JFrame {
                     .addComponent(deleteJButton, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(submitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(ViewjButton, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(updateBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(47, Short.MAX_VALUE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 146, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 37, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -398,18 +405,23 @@ public class Admission extends javax.swing.JFrame {
 
             } else {
                 DbHelper dh = new DbHelper(sName, fName, fContact, gender, birth, address, roll, sClass, season, aFees, aDate);
-                dh.insert();
-                JOptionPane.showMessageDialog(null, "YOUR ADDMISSION DONE.");
+                int a = dh.insert(flag, value);
 
-                studentNameTextField.setText("");
-                fatherNameTextField.setText("");
-                fatherMobileTextField.setText("");
-                dateBirthTextField.setText("");
-                addressTextField.setText("");
-                rollTextField.setText("");
-                sesonTextField.setText("");
-                feesTextField.setText("");
-                admissionDateTextField.setText("");
+                if (a == 0) {
+                    rollTextField.requestFocus();
+                } else {
+                    JOptionPane.showMessageDialog(null, "YOUR ADDMISSION DONE.");
+                    studentNameTextField.setText("");
+                    fatherNameTextField.setText("");
+                    fatherMobileTextField.setText("");
+                    dateBirthTextField.setText("");
+                    addressTextField.setText("");
+                    rollTextField.setText("");
+                    sesonTextField.setText("");
+                    feesTextField.setText("");
+                    admissionDateTextField.setText("");
+                }
+
             }
 
         } catch (Exception e) {
@@ -420,15 +432,15 @@ public class Admission extends javax.swing.JFrame {
     }//GEN-LAST:event_submitButtonActionPerformed
 
     private void ViewjButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ViewjButtonActionPerformed
-        DefaultTableModel model = new DefaultTableModel(new String[]{"SNO","Name", "Father Name", "Gender", "DOB", "FCN", "Roll", "Class", "Section", "A FESS", "A Date", "Address"}, 0);
-        String sqlQ= "SELECT * FROM admission";
+        DefaultTableModel model = new DefaultTableModel(new String[]{"SNO", "Name", "Father Name", "Gender", "DOB", "FCN", "Roll", "Class", "Section", "A FESS", "A Date", "Address"}, 0);
+        String sqlQ = "SELECT * FROM admission";
         Sql sql = new Sql();
         Connection conn = sql.ConnectDb();
         try {
             Statement st = conn.createStatement();
             ResultSet rs = st.executeQuery(sqlQ);
-            int i=1;
-            
+            int i = 1;
+
             while (rs.next()) {
                 String sName = rs.getString("sname");
                 String fName = rs.getString("fname");
@@ -441,18 +453,89 @@ public class Admission extends javax.swing.JFrame {
                 String aFees = rs.getString("afees");
                 String aDate = rs.getString("adate");
                 String address = rs.getString("address");
-                System.out.println( sName+" "+ fName+" "+ gender+" "+DOB+" "+FCN+" "+roll+" " +sclass+" "+section+ " "+aFees+" "+aDate+" "+address);
-                
-                model.addRow(new Object[]{i,sName, fName, gender, DOB, FCN, roll, sclass, section, aFees, aDate, address});
+                System.out.println(sName + " " + fName + " " + gender + " " + DOB + " " + FCN + " " + roll + " " + sclass + " " + section + " " + aFees + " " + aDate + " " + address);
+
+                model.addRow(new Object[]{i, sName, fName, gender, DOB, FCN, roll, sclass, section, aFees, aDate, address});
                 i++;
-                
+
             }
             jTable1.setModel(model);
-            
+
         } catch (SQLException ex) {
-            Logger.getLogger(Admission.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, ex.toString());
         }
     }//GEN-LAST:event_ViewjButtonActionPerformed
+
+    private void deleteJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteJButtonActionPerformed
+        int column = 6;
+        int row = jTable1.getSelectedRow();
+        String value = jTable1.getModel().getValueAt(row, column).toString();
+        DbHelper dh = new DbHelper();
+        dh.deleteQ(value);
+        ViewjButtonActionPerformed(evt);
+    }//GEN-LAST:event_deleteJButtonActionPerformed
+
+    private void updateBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateBtnActionPerformed
+        flag = "update";
+        String sName = "", fName = "", gender = "", DOB = "", FCN = "", roll = "", sclass = "", section = "", aFeesaDate = "", aFees = "", aDate = "", address = "";
+        int column = 6;
+        int row = jTable1.getSelectedRow();
+        value = jTable1.getModel().getValueAt(row, column).toString();
+
+        String sqlQ = "SELECT * FROM admission WHERE roll = '" + value + "'";
+        Sql sql = new Sql();
+        Connection conn = sql.ConnectDb();
+        try {
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery(sqlQ);
+            int i = 1;
+
+            while (rs.next()) {
+                sName = rs.getString("sname");
+                fName = rs.getString("fname");
+                gender = rs.getString("sgender");
+                DOB = rs.getString("birth");
+                FCN = rs.getString("fcontact");
+                roll = rs.getString("roll");
+                sclass = rs.getString("class");
+                section = rs.getString("season");
+                aFees = rs.getString("afees");
+                aDate = rs.getString("adate");
+                address = rs.getString("address");
+                System.out.println(sName + " " + fName + " " + gender + " " + DOB + " " + FCN + " " + roll + " " + sclass + " " + section + " " + aFees + " " + aDate + " " + address);
+            }
+            studentNameTextField.setText(sName);
+            fatherNameTextField.setText(fName);
+            if (gender.equals("Male")) {
+                maleRadioButton.setSelected(true);
+            } else {
+                femaleRadioButton.setSelected(true);
+            }
+            dateBirthTextField.setText(DOB);
+            fatherMobileTextField.setText(FCN);
+            rollTextField.setText(roll);
+
+            if (sclass.equals("CLASS 1")) {
+                classComboBox.setSelectedIndex(0);
+            } else if (sclass.equals("CLASS 2")) {
+                classComboBox.setSelectedIndex(1);
+            } else if (sclass.equals("CLASS 3")) {
+                classComboBox.setSelectedIndex(2);
+            } else if (sclass.equals("CLASS 4")) {
+                classComboBox.setSelectedIndex(3);
+            } else if (sclass.equals("CLASS 5")) {
+                classComboBox.setSelectedIndex(4);
+            }
+
+            sesonTextField.setText(section);
+            feesTextField.setText(aFees);
+            admissionDateTextField.setText(aDate);
+            addressTextField.setText(address);
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex.toString());
+        }
+    }//GEN-LAST:event_updateBtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -503,7 +586,6 @@ public class Admission extends javax.swing.JFrame {
     private javax.swing.JTextField fatherNameTextField;
     private javax.swing.JTextField feesTextField;
     private javax.swing.JRadioButton femaleRadioButton;
-    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -525,5 +607,6 @@ public class Admission extends javax.swing.JFrame {
     private javax.swing.JTextField sesonTextField;
     private javax.swing.JTextField studentNameTextField;
     private javax.swing.JButton submitButton;
+    private javax.swing.JButton updateBtn;
     // End of variables declaration//GEN-END:variables
 }
