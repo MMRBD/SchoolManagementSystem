@@ -410,6 +410,9 @@
             </Property>
             <Property name="text" type="java.lang.String" value="CLEAR"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="clearButtonActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="deleteJButton">
           <Properties>
@@ -447,15 +450,19 @@
         <Component class="javax.swing.JComboBox" name="classComboBox">
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="5">
-                <StringItem index="0" value="CLASS 1"/>
-                <StringItem index="1" value="CLASS 2"/>
-                <StringItem index="2" value="CLASS 3"/>
-                <StringItem index="3" value="CLASS 4"/>
-                <StringItem index="4" value="CLASS 5"/>
+              <StringArray count="6">
+                <StringItem index="0" value="&lt;...SELECT...&gt;"/>
+                <StringItem index="1" value="CLASS 1"/>
+                <StringItem index="2" value="CLASS 2"/>
+                <StringItem index="3" value="CLASS 3"/>
+                <StringItem index="4" value="CLASS 4"/>
+                <StringItem index="5" value="CLASS 5"/>
               </StringArray>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="classComboBoxActionPerformed"/>
+          </Events>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
           </AuxValues>

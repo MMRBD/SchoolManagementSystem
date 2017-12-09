@@ -166,6 +166,11 @@ public class Admission extends javax.swing.JFrame {
 
         clearButton.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         clearButton.setText("CLEAR");
+        clearButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                clearButtonActionPerformed(evt);
+            }
+        });
 
         deleteJButton.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         deleteJButton.setText("DELETE");
@@ -191,7 +196,12 @@ public class Admission extends javax.swing.JFrame {
             }
         });
 
-        classComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "CLASS 1", "CLASS 2", "CLASS 3", "CLASS 4", "CLASS 5" }));
+        classComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "<...SELECT...>", "CLASS 1", "CLASS 2", "CLASS 3", "CLASS 4", "CLASS 5" }));
+        classComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                classComboBoxActionPerformed(evt);
+            }
+        });
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -400,7 +410,7 @@ public class Admission extends javax.swing.JFrame {
 
         try {
             if ((sName.equals("")) || fName.equals("") || fContact.equals("") || birth.equals("") || address.equals("")
-                    || roll.equals("") || sClass.equals("") || season.equals("") || aFees.equals("") || aDate.equals("")) {
+                    || roll.equals("") || sClass.equals("") || season.equals("") || aFees.equals("") || aDate.equals("") || classComboBox.getSelectedIndex() == 0) {
                 JOptionPane.showMessageDialog(null, "PLEASE FILL ALL THE FIELD.", "ALERT", JOptionPane.ERROR_MESSAGE);
 
             } else {
@@ -420,9 +430,14 @@ public class Admission extends javax.swing.JFrame {
                     sesonTextField.setText("");
                     feesTextField.setText("");
                     admissionDateTextField.setText("");
+
+                    buttonGroup.clearSelection();
+                    classComboBox.setSelectedIndex(0);
+
                 }
 
             }
+            flag = "";
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.toString());
@@ -453,7 +468,7 @@ public class Admission extends javax.swing.JFrame {
                 String aFees = rs.getString("afees");
                 String aDate = rs.getString("adate");
                 String address = rs.getString("address");
-                System.out.println(sName + " " + fName + " " + gender + " " + DOB + " " + FCN + " " + roll + " " + sclass + " " + section + " " + aFees + " " + aDate + " " + address);
+                //System.out.println(sName + " " + fName + " " + gender + " " + DOB + " " + FCN + " " + roll + " " + sclass + " " + section + " " + aFees + " " + aDate + " " + address);
 
                 model.addRow(new Object[]{i, sName, fName, gender, DOB, FCN, roll, sclass, section, aFees, aDate, address});
                 i++;
@@ -468,74 +483,103 @@ public class Admission extends javax.swing.JFrame {
 
     private void deleteJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteJButtonActionPerformed
         int column = 6;
-        int row = jTable1.getSelectedRow();
-        String value = jTable1.getModel().getValueAt(row, column).toString();
-        DbHelper dh = new DbHelper();
-        dh.deleteQ(value);
-        ViewjButtonActionPerformed(evt);
+        if (jTable1.isRowSelected(jTable1.getSelectedRow())) {
+            int row = jTable1.getSelectedRow();
+            String value = jTable1.getModel().getValueAt(row, column).toString();
+            DbHelper dh = new DbHelper();
+            dh.deleteQ(value);
+            ViewjButtonActionPerformed(evt);
+        } else {
+            JOptionPane.showMessageDialog(null, "PLEASE SELECT A ROW");
+        }
     }//GEN-LAST:event_deleteJButtonActionPerformed
 
     private void updateBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateBtnActionPerformed
         flag = "update";
         String sName = "", fName = "", gender = "", DOB = "", FCN = "", roll = "", sclass = "", section = "", aFeesaDate = "", aFees = "", aDate = "", address = "";
+
         int column = 6;
-        int row = jTable1.getSelectedRow();
-        value = jTable1.getModel().getValueAt(row, column).toString();
+        if (jTable1.isRowSelected(jTable1.getSelectedRow())) {
+            int row = jTable1.getSelectedRow();
+            value = jTable1.getModel().getValueAt(row, column).toString();
 
-        String sqlQ = "SELECT * FROM admission WHERE roll = '" + value + "'";
-        Sql sql = new Sql();
-        Connection conn = sql.ConnectDb();
-        try {
-            Statement st = conn.createStatement();
-            ResultSet rs = st.executeQuery(sqlQ);
-            int i = 1;
+            String sqlQ = "SELECT * FROM admission WHERE roll = '" + value + "'";
+            Sql sql = new Sql();
+            Connection conn = sql.ConnectDb();
+            try {
+                Statement st = conn.createStatement();
+                ResultSet rs = st.executeQuery(sqlQ);
+                int i = 1;
 
-            while (rs.next()) {
-                sName = rs.getString("sname");
-                fName = rs.getString("fname");
-                gender = rs.getString("sgender");
-                DOB = rs.getString("birth");
-                FCN = rs.getString("fcontact");
-                roll = rs.getString("roll");
-                sclass = rs.getString("class");
-                section = rs.getString("season");
-                aFees = rs.getString("afees");
-                aDate = rs.getString("adate");
-                address = rs.getString("address");
-                System.out.println(sName + " " + fName + " " + gender + " " + DOB + " " + FCN + " " + roll + " " + sclass + " " + section + " " + aFees + " " + aDate + " " + address);
+                while (rs.next()) {
+                    sName = rs.getString("sname");
+                    fName = rs.getString("fname");
+                    gender = rs.getString("sgender");
+                    DOB = rs.getString("birth");
+                    FCN = rs.getString("fcontact");
+                    roll = rs.getString("roll");
+                    sclass = rs.getString("class");
+                    section = rs.getString("season");
+                    aFees = rs.getString("afees");
+                    aDate = rs.getString("adate");
+                    address = rs.getString("address");
+                    System.out.println(sName + " " + fName + " " + gender + " " + DOB + " " + FCN + " " + roll + " " + sclass + " " + section + " " + aFees + " " + aDate + " " + address);
+                }
+                studentNameTextField.setText(sName);
+                fatherNameTextField.setText(fName);
+                if (gender.equals("Male")) {
+                    maleRadioButton.setSelected(true);
+                } else {
+                    femaleRadioButton.setSelected(true);
+                }
+                dateBirthTextField.setText(DOB);
+                fatherMobileTextField.setText(FCN);
+                rollTextField.setText(roll);
+
+                if (sclass.equals("CLASS 1")) {
+                    classComboBox.setSelectedIndex(1);
+                } else if (sclass.equals("CLASS 2")) {
+                    classComboBox.setSelectedIndex(2);
+                } else if (sclass.equals("CLASS 3")) {
+                    classComboBox.setSelectedIndex(3);
+                } else if (sclass.equals("CLASS 4")) {
+                    classComboBox.setSelectedIndex(4);
+                } else if (sclass.equals("CLASS 5")) {
+                    classComboBox.setSelectedIndex(5);
+                }
+
+                sesonTextField.setText(section);
+                feesTextField.setText(aFees);
+                admissionDateTextField.setText(aDate);
+                addressTextField.setText(address);
+
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, ex.toString());
             }
-            studentNameTextField.setText(sName);
-            fatherNameTextField.setText(fName);
-            if (gender.equals("Male")) {
-                maleRadioButton.setSelected(true);
-            } else {
-                femaleRadioButton.setSelected(true);
-            }
-            dateBirthTextField.setText(DOB);
-            fatherMobileTextField.setText(FCN);
-            rollTextField.setText(roll);
-
-            if (sclass.equals("CLASS 1")) {
-                classComboBox.setSelectedIndex(0);
-            } else if (sclass.equals("CLASS 2")) {
-                classComboBox.setSelectedIndex(1);
-            } else if (sclass.equals("CLASS 3")) {
-                classComboBox.setSelectedIndex(2);
-            } else if (sclass.equals("CLASS 4")) {
-                classComboBox.setSelectedIndex(3);
-            } else if (sclass.equals("CLASS 5")) {
-                classComboBox.setSelectedIndex(4);
-            }
-
-            sesonTextField.setText(section);
-            feesTextField.setText(aFees);
-            admissionDateTextField.setText(aDate);
-            addressTextField.setText(address);
-
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex.toString());
+        } else {
+            JOptionPane.showMessageDialog(null, "PLEASE SELECT A ROW");
         }
     }//GEN-LAST:event_updateBtnActionPerformed
+
+    private void clearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearButtonActionPerformed
+        studentNameTextField.setText("");
+        fatherNameTextField.setText("");
+        fatherMobileTextField.setText("");
+        dateBirthTextField.setText("");
+        addressTextField.setText("");
+        rollTextField.setText("");
+        sesonTextField.setText("");
+        feesTextField.setText("");
+        admissionDateTextField.setText("");
+
+        buttonGroup.clearSelection();
+        classComboBox.setSelectedIndex(0);
+
+    }//GEN-LAST:event_clearButtonActionPerformed
+
+    private void classComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_classComboBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_classComboBoxActionPerformed
 
     /**
      * @param args the command line arguments
